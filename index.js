@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-// const cors = require('cors');
+const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 dotenv.config();
 
@@ -9,7 +9,7 @@ const uri = process.env.MONGODB_URI
 const app = express()
 const PORT = process.env.PORT
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 const client = new MongoClient(uri, {
@@ -30,6 +30,8 @@ async function run() {
         const db = client.db("DocAppoint");
         const doctorsCollection = db.collection("doctors");
 
+        const bookingCollction = db.collection("bookings")
+
         // For Appointments Page
         app.get("/appointments", async (req, res) => {
             const result = await doctorsCollection.find().toArray();
@@ -40,6 +42,14 @@ async function run() {
         app.get("/appointments/:id", async (req, res) => {
             const { id } = req.params
             const result = await doctorsCollection.findOne({ _id: new ObjectId(id) });
+
+            res.json(result);
+        })
+
+        // For Booking modal
+        app.post("/booking", async (req, res) => {
+            const bookingData = req.body;
+            const result = await bookingCollction.insertOne(bookingData);
 
             res.json(result);
         })
