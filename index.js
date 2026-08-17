@@ -70,6 +70,21 @@ async function run() {
             res.json(result);
         })
 
+
+        // For Updating booking data
+        app.patch("/booking/:bookingId", async (req, res) => {
+            const { bookingId } = req.params;
+            const updatedData = req.body;
+
+            const result = await bookingCollection.updateOne(
+                { _id: new ObjectId(bookingId) },
+                { $set: updatedData }
+            )
+
+            res.json(result);
+        });
+
+
         return client;
     }
     finally {
