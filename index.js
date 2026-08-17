@@ -30,7 +30,7 @@ async function run() {
         const db = client.db("DocAppoint");
         const doctorsCollection = db.collection("doctors");
 
-        const bookingCollction = db.collection("bookings")
+        const bookingCollection = db.collection("bookings")
 
         // For Appointments Page
         app.get("/appointments", async (req, res) => {
@@ -49,7 +49,23 @@ async function run() {
         // For Booking modal
         app.post("/booking", async (req, res) => {
             const bookingData = req.body;
-            const result = await bookingCollction.insertOne(bookingData);
+            const result = await bookingCollection.insertOne(bookingData);
+
+            res.json(result);
+        })
+
+        // For Dashboard-MyBookings
+        app.get("/booking/:userId", async (req, res) => {
+            const { userId } = req.params
+            const result = await bookingCollection.find({ userId: userId }).toArray();
+
+            res.json(result);
+        })
+
+        // For Booking delete by id
+        app.delete('/booking/:bookingId', async (req, res) => {
+            const { bookingId } = req.params;
+            const result = await bookingCollection.deleteOne({ _id: new ObjectId(bookingId) });
 
             res.json(result);
         })
