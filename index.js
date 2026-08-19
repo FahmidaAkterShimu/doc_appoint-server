@@ -90,6 +90,16 @@ async function run() {
             res.json(result);
         })
 
+        // For Dashboard-MyProfile
+        app.get("/user/:userId", verifyToken, async (req, res) => {
+            const { userId } = req.params;
+            const result = await userCollection.findOne({
+                _id: new ObjectId(userId)
+            });
+
+            res.json(result);
+        });
+
         // For Booking delete by id
         app.delete('/booking/:bookingId', verifyToken, async (req, res) => {
             const { bookingId } = req.params;
