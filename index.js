@@ -49,9 +49,9 @@ const verifyToken = async (req, res, next) => {
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("You successfully connected to MongoDB!");
 
         const db = client.db("DocAppoint");
